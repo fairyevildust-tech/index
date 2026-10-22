@@ -1,0 +1,162 @@
+<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><title>ETS. WIMAS — Packaging Collection</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Jost:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#14171c;--mute:#6b7280;--line:#e4e6ea;--brand:#26325a;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#fff}}
+html{scroll-snap-type:y mandatory;scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+body{margin:0;background:#fff;color:var(--fg);font:300 15px/1.6 Jost,system-ui,sans-serif}
+*{box-sizing:border-box}
+header{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;z-index:5;display:flex;justify-content:space-between;padding:16px 22px;font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:18px;letter-spacing:.14em}
+header span{font:300 13px Jost,sans-serif;letter-spacing:.04em;color:var(--mute)}
+#c{position:fixed;z-index:1;top:0;left:34%;width:66%;height:100%;touch-action:pan-y;cursor:grab;transition:opacity .5s}
+section{position:relative;z-index:2;height:100vh;height:100svh;scroll-snap-align:start;display:flex;align-items:center;padding:0 5vw;pointer-events:none}
+.txt{width:30%;max-width:380px;pointer-events:auto}
+h1,h2{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;margin:0 0 .4em;line-height:1.05}
+h1{font-size:clamp(44px,6vw,84px);letter-spacing:.04em}
+h2{font-size:clamp(30px,3.2vw,44px)}
+.sub{font-family:'Cormorant Garamond',serif;font-size:22px;margin:0 0 1.2em}
+dl{margin:1.4em 0;display:grid;grid-template-columns:auto 1fr;gap:6px 18px;font-size:14px}dt{color:var(--mute)}dd{margin:0}
+p{margin:.6em 0;color:#3b4048}
+.v{display:inline-flex;gap:8px;align-items:center;font-size:14px}
+.sw{width:14px;height:14px;border-radius:50%;border:1px solid var(--line)}
+.views{display:flex;gap:8px;margin-top:1.4em}
+button{font:inherit;font-size:13px;background:none;border:1px solid var(--fg);color:var(--fg);padding:7px 16px;border-radius:999px;cursor:pointer}
+button:hover,button:focus-visible{background:var(--fg);color:#fff;outline:none}
+nav{position:fixed;right:18px;top:50%;transform:translateY(-50%);z-index:5;display:flex;flex-direction:column;gap:10px}
+nav a{width:7px;height:7px;border-radius:50%;background:#c5c9cf;transition:.3s}nav a.on{background:var(--fg);transform:scale(1.5)}
+.hero .txt{width:30%;max-width:420px}.hero small{display:block;margin-top:2em;color:var(--mute)}
+.fin{background:#fff}.fin .txt{width:100%;max-width:880px;margin:0 auto;padding-top:60px}
+table{border-collapse:collapse;width:100%;font-size:14px;margin:1.2em 0}td,th{text-align:left;padding:10px 12px 10px 0;border-bottom:1px solid var(--line);vertical-align:top}th{font-weight:400;color:var(--mute)}
+.ok{color:#1d6b3a}.no{color:#a3341f}.na{color:#6b7280}
+@media(max-width:800px){
+#c{left:0;width:100%;height:56%}
+section{align-items:flex-end;padding:0 22px calc(28px + env(safe-area-inset-bottom,0px))}
+.txt,.hero .txt{width:100%;max-width:none}
+h2{font-size:30px}dl{margin:.8em 0;font-size:13px}p{font-size:14px;margin:.3em 0}.views{margin-top:.9em}
+nav{right:8px}.fin{align-items:flex-start;overflow:auto;height:auto;min-height:100svh}.fin .txt{padding-top:70px}
+}
+body.ex #c{left:0!important;width:100%!important;height:100%!important;z-index:20;background:#fff;touch-action:none;opacity:1!important}
+body.ex header,body.ex nav,body.ex section{visibility:hidden}
+#c{cursor:pointer}
+#exui{display:none;position:fixed;inset:0;z-index:30;pointer-events:none}#exui>*{pointer-events:auto}
+#exx{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));right:16px;width:44px;height:44px;border-radius:50%;font-size:18px;padding:0;border:none;background:#f0f2f4}
+#exui .cap{position:absolute;top:calc(24px + env(safe-area-inset-top,0px));left:0;right:70px;text-align:center;color:var(--mute);letter-spacing:.06em;pointer-events:none}
+#exui .hint{position:absolute;bottom:calc(84px + env(safe-area-inset-bottom,0px));left:0;right:0;text-align:center;color:#9aa0a8;font-size:12px;pointer-events:none}
+#exui .views{position:absolute;bottom:calc(24px + env(safe-area-inset-bottom,0px));left:0;right:0;justify-content:center;flex-wrap:wrap;margin:0}
+.tapn{display:block;margin-top:1em;font-size:12px;color:#9aa0a8}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style></head><body>
+<header>ETS. WIMAS<span>Packaging Collection</span></header>
+<canvas id="c"></canvas><nav id="nav" aria-label="Products"></nav><main id="m"></main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const BR='#26325a',GOLD='#cfae5f',LOGO='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPAAAADwCAMAAAAJixmgAAAAilBMVEX///8AAADt7e2oqKjx8fH5+fn8/PzAwMD09PSSkpLd3d0RERHq6urn5+fj4+Pv7++6urqfn5/U1NTHx8eurq7Y2NiLi4vMzMyXl5eysrJLS0tQUFBoaGhtbW2dnZ16enpaWlqCgoJDQ0M6Ojpzc3MxMTEnJydWVlYuLi5gYGAeHh4/Pz8YGBgLCwtnZXuuAAAP7klEQVR4nO1dZ5eqOhQVqTqKFBW7Ypvhzsz//3sP0hsKUsa3VvaHu+4cULNJclpOwmCgoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGh0Q7sv25AR1gEJReSea/t6A+BUUI5S/ttSG84GtupSh4a176b0g98wzAihTwwjJFC7HTdnpbglDbUyXLGrizPCRsLWbxQ3PqOmI5Wkae+dMiZGYkkNnPpWb57aExablpHcObGfeSrrsQFYWMsipfq5zA1Tq23rSMUY/So0E8+ILwRDK+9LaR76e5EOdDfE6OCgimJp4CwESqlQ/Huo2EsO2thy7C/QVdaghhRM/jON6FQ1N/g5k5b2SYSJQlMmHOt7F8oFC3TsRCKj+x9cYIseMuyQoRjRmahO0XCiVrBvS1cRINVvjGSsf2WYJkwzr0PIJS11njWUYurYDKdlYU6FmywkVHRAlOjqmiYEr5r7uPOJ5TK1i04tNHyF5Esjct+GSsd5AwRIX6XT7iRceoSkcHHD1M8zmUP5rT5U5fTAk5DtpZsCp7EhLBHuJFOXxqyrEBE+1362tzE/3H8jCZmKgw+rJDviLBzISSwIttRvgyJafhFxYLFzmew8eeEc5cX4sp5vgck/UR/h5QFejQrKqGDPNkwUtnvmPIP549ABuuKyvBTME7CPTmgmnUYCbZI/pmlK+cLgBr4+nPCA0vuEdKhJ/j3mOEB53vESJDWSwwWO0kXJupu/wMQg4Mnsncn7YYCn2EC3a81FdyhLp5wfCVP3EGz5C2i5DlqJVYyTF/BZzD7oJIjkOyp4AYJpyxfwSl1pi6e3SWxdr/AU/SE/j7QliMDy85O4D6x7IDnxY5x1qWcjePDdUuu/KXfQWFjo4PmHUMYqR7WBp0cYfyCUXBhBMTZXhy2HwYH2eL/BWzcKuQgcr0FWr9kJaGgoIroac78/Y2+dsw+BPbx8egur+1M/bGvct6J1flEfgbboeApuFyzExwEQ+zygSt+YMDpNYSzKgWy7EpvJ9kP+t3rPOFVx5Q0CelQrouN0BEExpB7IsYERr/0eRTgnkmBvTLjExodrlxM18QT2pmMM8nQQf4WTyizptzfxvbO/Tn3uT/BPF1xIuNiKmMUb6nK/7UIx6XO347EtTFt2B12w4JvrpHcjQf4PnF/5r6Uw0164xao/aukmOUdh09OQMnhgc3RC0ED9sbrsAf2lROs1HR9MBFWymttYkLGK47qPK5538VEHhuvw3b4Hlc7Vz6a9314IsTOYn0Rcg0ElNPXCVtczMQEiba/iHIs8n8D7Iv042oSK4NcIkcawaYvSl4FXoXx5v8UV4+98KVa+IJnVyY15UeSvAaohG3JSgF8ljexXRCnIEOMhWnXHraFDmQ0JQcp198ZqF3N0G/iRGPbKNyuaKO+tu/Ps/Zu9GcDqCeds7pVDTEcjK/KC9mq17U21he8rcbFuLO7YHz0RrJws1qPrZ7TtXw0YFzS2FdprsbY3kRJFjzi6jSf1Y4fxQWSBRsoWb9S2z6ucnzTOj6VS+0Ux2bT2nZFn5ZcKtGbHeNJwsM/Z49veIIoPaQZP6Y2JGhRG8ZusX7U2sH42ErRgO0HnB9F8i+RnJDoGNiTtafxOoh9i4kpnMm8cDZV9U+vYBKc5J8d2GFp0zoBTG14ixE2y5uluZhYtjeJV7B9WXtZeieihuhIvtbfKdr1ANdgvV6bOAN2MsMcDyNlFtv8B2dJ+iWIvzZkpG3bdbxoXuOLruEL5ukJQODjYcKgx5zKE8OeufuPRzfs2o4UmUzOZ4x7WeUYMPjc73Z7Yp+BkuWXZmzSY7sc+xInMsdR7XBRdJAJ4GzUbRnEkZ87AZNtWRMMpOJIqPiQMBiPc/ELKkNVxtkUtvqnVHEqBojPSfrjIWHgMrxq7EqyQE2RPP/lfOhdr0fS6S8TPhUjvHyAFzhn+2OaLkeredJZqcvyYQsAHK7djwinjwgDB+eBSkyjaR/hg/c86gVTkVhoBWGyygB7mHhyPGHgM5f6r6veKm2tp5b3EWGYj9uz12xih6sTzp5EEO3CfRL2PiIMl8lc9k6a065MuMtdIYt4nmbn+y1llb5/ULajAmGY5URjGi4d0yWVqoRx99p+lETKBZhXyZpcoMStVDK1VLUIQ+cAfhgENkxxSzXCR9tbxMEhI7ZwqTTA07plmp7CAwhYtWgnVzkH8JQwrPkALts3sJzMslQ1wiovxxR8aGcaXuqp8CILfLvJjqvJKcdpIDryzwmDLDPQzLCzmdxYHS0tIkX7LBzP8oPDuXbhsRtNLM8aTv0kTHnjvwtjfzr1F665SrfKQOcxYbhFqVACYMyxq1JNCBvGRzpaLo8oXbFpkuixJ26tIJAnHAuE4dpXLtgMREbNCLNYNg6b6gSBgDDRvZ+2QBjqvgvK1rAmTuFpvUT41sYKeY3VT0DYIkyKRWT201vwfWtYKsAVBnCEYcT9CuGWlhMnUn64DEh70Gkw5R8XGKsWVNdcbMQSRrm4ZyNrm+bzlh0lWaxq/Euwq2bZsVmkcUbELZ1C9xKaSU7rsYThU3vouV9MYmpni3i125yzdbse9urBr7PAY4qm+Fa3nw8MZH8BIoOIP345wmBeTB6suC77WFhaVNTWuDCULkSY1pBgQl0CezJkwMaVBeFyvfEtehqdYRqs0sdBOQDODlM3St6mVgJKOCr58nyiLibT6dDqq3DatqauOXo8o1PUizQUqroLnBB+agnvm9P+mo7mi76WESfpg9ZkyPRTu7Or1i5E2K6RzLvN2+zryNwav+dRLCSNvPjJfL6hWWYRRfxdqVmQ8L3emsZvW8V4CePaf4QxLm6I5lWWvpGJcOjgX40gkOeXLEcsoPTFrOWxhU62FL99OqZ7VYSkBDYcqXQFupXiGGmUpv1paqZKyoRqARtkyYCfCulElDYinJsG0VTV6vR2lkJx8knSQL6KWkPCuTOyXkxmXsHT9iYL9bb8EuRO+24UroM4jt21mb7cBLxgL9qYUFX005gwwGWb7bLtzfiuxXe5sFkroprO1YCr1cVyYpUfVZNwdjCDIDCP6qtlB+GoIecLvKqOtNQs9OCECvFoIGc+qxPemPGMdkgktW3jtqC0ZxVWWVT4Qi7IjIuM0oF8Z1XCd1fypBNmKfUUtJW6HZpCTFxRsSGDzMeXCk+5zpBeukIkaMXH8/duFbccRPkRrFdejH1/Mqnq/pUbZIB/x/qEAelg0uvGy3H1ujuchlAXC/jBa4RznEddLIMrMU3rNAzXVynofPnYTL9mlrJe1hHHdTUYLuOXgr4ig9yIcDe1DkPfnxJD4LsvFJGWGGRQWNWQcPtH9gTIovy7bT7l6taKwPEwl9CD6xBNCbd7DpXTrER2TVb5zsggMwlflApqTPjeYoFW0yjCJVttjTty4Dw8I3Cia9WUsHFqyz45L7pXDOGBR+NevOnniC5BYI5VCO/ygCbJ/YDEDVM2aX1qp4xnWCFD+ZQw+9RwKmZJ/+8Q41yF8D8mH+34rBO9GjfvZR+ueN+Oh3mczJeKxdF7Oo9lqUCYTcnjIMbEvc3sMqw4pNnVlCFLeTOKmmmv4qyGf4eY5H9t32SX30+hO7QHsyeDABBmNDOet8j/95iPV57DG2a9bMxXBHwezXixiOYvMd8ZI6lQwnLD7P5xXgVjaGWerrGJC+J8CbfHVk3UUFrMVgRVdeZrVVzu9bmyf76KKhE2rjSSVeyTrqylKWUrZeXf5queVwX/pULpJV9NC7D11B+vWU37RRWzFQfz+XzttlvFJKGSzTqaOYQbv2FTRb96VdxaY6P1vd+tWtb6YXX6Q/wWuqH5Jqe+juXxJn4UPitPf4JE3GP9BFvlyk6nA7iAs1gvr9l3M64QNR/YJbGtcRAKA76tTTtliB9tQAkae6GPAQ24PTaZ+vuPbtfFHwzCcywcfNABjlhHMcq9Xva5HpySjHfRlEIHddzBBfCUdch8uHSXxXPKJt2XCRyGJsdYVAZZBiYBR9qZaSIdmF2vuw0pr9mj/UvOo6087YGccEEYnzo6zRUZzWMMutMeTv0odpMx8VlfXYmpC9KjdAYtu9jRAtZyb+XFQt3slM7WcraQOBspldVaGK2GXGH9e7BAJXr8be06jQeTuRh+EnJsVn8nrrw0xCw3g+V0F0KB4GVWXmJVE8VoFXLg9KCaiLtwWQZBa2bZLT/o2QrELN+oxc3jNzBluf2c3Fk0XuSG183X/X7bLtdJezZqVDJgfGnAQdPRnk1GzqNPK2m2fcRISj04MRW1n/viVvvVZL1hSOWzKJszJOPoz45qVQ5bWMXCx/u7OnFCypyxDYEGF/3OPyKsqlX/RDOdV9J1qgiLQmnh4J0d+kHygP+GsOK0rDRGs4vfZbwY8IlcYbPxTTilKc69Nv6BoaVWD3+w132HBDQw/UwP83UQMafFcyrLZc5ehox4OpsBP23BGz04x/yOvhkPlD95OxOO0EKF+ua8zMIx4gNHjx8AZ/EkLuC7WqytQ4TJ57o/9U8G7JWrwtBbXPPBBOQIH4XpvxFP4oLrCh5jAfDYIf5r14kOGT7TNA6CgvoGCVku2x4xR/cWKHb12GzSCDkWNMqnx/4TdV8hY94uClo7uXsdVzDAUL9wPYw/jgEOC2Kr1n7g99LDuZjzhub4UV16fk9PrrJGssMTicfioVaxKggYapYftDpstIUWDkbC3wB2jHt51esbPW6qaSSGxAc8BFJGCGVM1IdGMHOLePawMHyHAfq+sPMkLcXlJMv42snUJe1kzTAyKUdJwjwU5L1E/A0sPD8w0/32M+30GF4Wqbxe5dF1iC230YRzURAZxtlENoZO661QjfoXRkiCL2tJ3CF3IU/AlSmhxWH2yETUSaEoIAXz7/CaAxVW6uZxC2a4Ho8Z5CckIispZAQTf+RN340HfU1Rl7Had0/SyjTD+YOHChbcbemz7/miT+gtif3L8N1FCukZK3Iy0VnlgA1Tb6qpDoCfIL7Kj+or9nh3upuFOkx45PO9ib2tt3iXhQAwTEXfC2sifo86UdHMy4VwZwqm1YOBV80jKvrBXrEXHcXsd+5BELXNHtmIDbP0tWOgG1ortGsRoaK1c3le0s7kNtjiAEoR3I/Too/f4wUeLHzF0iWcgzteiOzXLy9FCQXlDn4nSX97dSSr4SorU3jIkBDYoFBCUHDIVJVGulbU2zbhqhjK7iZ4DeuPKD3JIzoHOgi/q9b1hFDBDDmh0uC1sre1udUxkVRWgaN6ttqFOuvtkPuOEKpc4VmZeip87Ld4Q9jrsC8qNylRjfQCXvg/esmyGpYybx4I77KksIPb/7yPLWVXxg9WTIZv6FY1x2TzHm976xHB/+dlyhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGm+I/wARLtcvjHYbqwAAAABJRU5ErkJggg==';
+const V={A:{n:'Brand colour',bg:BR,ink:GOLD,ink2:'#e7d6a4'},B:{n:'Black & white',bg:'#0a0a0a',ink:'#ffffff',ink2:'#d8d8d8'}};
+const SANS='Jost,sans-serif',SERIF='"Cormorant Garamond",Georgia,serif';
+const BAG={bag1:{w:35,d:16,h:36,frame:1,hw:6,lp:.2,r:.28},bag2:{w:11,d:9,h:35,frame:0,hw:2.2,lp:.14,r:.16},bag3:{w:44,d:12,h:32,frame:0,hw:7.5,lp:.2,r:.28}};
+const bp=(k,n,t,d,d2,x)=>['A','B'].map(v=>({n,t,d,d2,k,v,x:v=='A'?x:x+' Black with white print and white rope handles.'}));
+const P=[
+{n:'Model 1 — Flatter Drawer Box',t:'Slide drawer box',d:'38 × 15 × 4 cm',d2:'15.0 × 5.9 × 1.6 in · drawer depth 3.5 cm',k:'drawer',v:'A',x:'A sleeve and drawer in one clean block. Fits Bag Model 3 on its long edge.'},
+{n:'Model 1 — Flatter Drawer Box',t:'Slide drawer box',d:'38 × 15 × 4 cm',d2:'15.0 × 5.9 × 1.6 in · drawer depth 3.5 cm',k:'drawer',v:'B',x:'The same structure in high-contrast black with white print.'},
+{n:'Model 2 — Pillow Box',t:'Pillow box',d:'38 × 16.5 × 5.5 cm',d2:'Flat blank 46 cm before folding the ends',k:'pillow',v:'A',x:'A soft curved form with a single centred mark. Fits Bag Model 3 on its long edge.'},
+{n:'Model 2 — Pillow Box',t:'Pillow box',d:'38 × 16.5 × 5.5 cm',d2:'Flat blank 46 cm before folding the ends',k:'pillow',v:'B',x:'Black pillow box, white typography.'},
+...bp('bag1','Bag Model 1','Compact paper bag with rope handles','35 × 16 × 36 cm','Width × depth × height · 13.78 × 6.30 × 14.17 in','Inward M-fold side gusset with a sharp centre crease.'),
+...bp('bag2','Bag Model 2 — Tall Vertical','Tall narrow paper bag','11 × 9 × 35 cm','Width × depth × height · 4.33 × 3.54 × 13.78 in','Tall and narrow, with an inward M-fold side gusset.'),
+...bp('bag3','Bag Model 3','Wide paper bag with rope handles','44 × 12 × 32 cm','Width × depth × height · 17.32 × 4.72 × 12.60 in','Wide and shallow, with an inward M-fold side gusset. Holds both boxes on their long edge.')];
+const views=p=>(p.k.startsWith('bag')?[['Front',0,0],['Side',1.5708,0],['Back',3.1416,0]]:[['Top',0,1.25],['Side',0,0],['Underside',0,3.1416]]).map(a=>`<button data-a="${a[1]}" data-x="${a[2]}">${a[0]}</button>`).join('');
+// ---------- DOM
+const m=document.getElementById('m'),nav=document.getElementById('nav');
+m.innerHTML=`<section class="hero" data-i="-1"><div class="txt"><h1>ETS. WIMAS</h1><div class="sub">Boutique Vlisco Détail</div><p>Ten packaging designs: two boxes and three bags, each in brand colour and black &amp; white. Scroll to see them one by one. Drag a product to turn it.</p></div></section>`+
+P.map((p,i)=>`<section data-i="${i}"><div class="txt"><h2>${p.n}</h2><div class="sub">${p.t}</div><span class="v"><i class="sw" style="background:${V[p.v].bg}"></i>${V[p.v].n}</span><dl><dt>Size</dt><dd>${p.d}</dd><dt>Detail</dt><dd>${p.d2}</dd></dl><p>${p.x}</p><div class="views">${views(p)}</div><small class="tapn">Tap the product to open it full screen</small></div></section>`).join('')+
+`<section class="fin" data-i="-2"><div class="txt"><h2>How the system fits together</h2><table><tr><th>Bag</th><th>Box 1 · 38 × 15 × 4</th><th>Box 2 · 38 × 16.5 × 5.5</th></tr>
+<tr><td>Bag 3 · 44 × 12 × 32</td><td class="ok">Fits on its long edge. 6 cm spare in length, 8 cm in depth.</td><td class="ok">Fits on its long edge. 6 cm spare in length, 6.5 cm in depth.</td></tr>
+<tr><td>Bag 1 · 35 × 16 × 36</td><td class="na">Not for this box: 38 cm is longer than the 35 cm width.</td><td class="na">Not for this box: 38 cm is longer than the 35 cm width.</td></tr>
+<tr><td>Bag 2 · 11 × 9 × 35</td><td class="na">Not for this box: 15 cm is wider than the 11 cm width.</td><td class="na">Not for this box: 16.5 cm is wider than the 11 cm width.</td></tr></table>
+<p>Bag 3 also holds both boxes side by side on their long edge: 9.5 cm of its 12 cm depth, 16.5 cm of its 32 cm height.</p>
+<p>Bags 1 and 2 suit garments, folded fabric and smaller items.</p></div></section>`;
+nav.innerHTML=[...document.querySelectorAll('section')].map((s,i)=>`<a href="#" data-n="${i}" aria-label="Section ${i+1}"></a>`).join('');
+const secs=[...document.querySelectorAll('section')];
+nav.onclick=e=>{const a=e.target.closest('a');if(a){e.preventDefault();secs[+a.dataset.n].scrollIntoView()}};
+// ---------- 3D
+const cv=document.getElementById('c'),R=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:true});
+R.setPixelRatio(Math.min(devicePixelRatio,2));R.outputEncoding=THREE.sRGBEncoding;R.toneMapping=THREE.ACESFilmicToneMapping;R.toneMappingExposure=1.05;
+const S=new THREE.Scene(),cam=new THREE.PerspectiveCamera(28,1,.1,1000);
+S.add(new THREE.HemisphereLight(0xffffff,0xd8dce2,.75));
+const key=new THREE.DirectionalLight(0xfff6ea,1.1);key.position.set(-40,70,60);S.add(key);
+const rim=new THREE.DirectionalLight(0xdbe6ff,.45);rim.position.set(60,30,-50);S.add(rim);
+const holder=new THREE.Group();S.add(holder);
+// soft shadow
+const sc=document.createElement('canvas');sc.width=sc.height=128;{const g=sc.getContext('2d'),r=g.createRadialGradient(64,64,0,64,64,64);r.addColorStop(0,'rgba(0,0,0,.38)');r.addColorStop(1,'rgba(0,0,0,0)');g.fillStyle=r;g.fillRect(0,0,128,128)}
+const shadow=new THREE.Mesh(new THREE.PlaneGeometry(1,1),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(sc),transparent:true,depthWrite:false}));shadow.rotation.x=-Math.PI/2;S.add(shadow);
+// logo ink cache
+const img=new Image();let logoReady=new Promise(r=>{img.onload=r});img.src=LOGO;
+const inkCache={};function logoInk(col,sz){const k=col+sz;if(inkCache[k])return inkCache[k];const c=document.createElement('canvas');c.width=c.height=sz;const g=c.getContext('2d');g.drawImage(img,0,0,sz,sz);const d=g.getImageData(0,0,sz,sz),rgb=new THREE.Color(col);for(let i=0;i<d.data.length;i+=4){const l=(d.data[i]+d.data[i+1]+d.data[i+2])/3;d.data[i+3]=Math.max(0,Math.min(255,(255-l)*1.2));d.data[i]=rgb.r*255;d.data[i+1]=rgb.g*255;d.data[i+2]=rgb.b*255}g.putImageData(d,0,0);return inkCache[k]=c}
+function spaced(g,s,x,y,size,sp,max,col,font){let f=size;const w=f=>{g.font=font(f);let t=0;for(const ch of s)t+=g.measureText(ch).width+f*sp;return t-f*sp};while(w(f)>max&&f>6)f-=1;g.font=font(f);g.fillStyle=col;g.textBaseline='alphabetic';let cx=x-w(f)/2;g.textAlign='left';for(const ch of s){g.fillText(ch,cx,y);cx+=g.measureText(ch).width+f*sp}return f}
+function lines(g,txt,x,y,size,max,col,lh){g.font=`300 ${size}px ${SANS}`;g.fillStyle=col;g.textAlign='center';const ws=txt.split(' ');let l='',yy=y;for(const w of ws){const t=l?l+' '+w:w;if(g.measureText(t).width>max&&l){g.fillText(l,x,yy);yy+=size*lh;l=w}else l=t}g.fillText(l,x,yy);return yy+size*lh}
+const K=34;
+function panel(w,h,v,kind){const c=document.createElement('canvas');const k=kind=='plain'?16:K;c.width=w*k;c.height=h*k;const g=c.getContext('2d'),W=c.width,H=c.height,cx=W/2,col=V[v];
+g.fillStyle=col.bg;g.fillRect(0,0,W,H);
+for(let i=0;i<5000;i++){g.fillStyle=`rgba(${Math.random()>.5?255:0},${Math.random()>.5?255:0},${Math.random()>.5?255:0},.025)`;g.fillRect(Math.random()*W,Math.random()*H,1+Math.random()*2,1)}
+{const A=.55*k,P=4.2*k,sp=1.1*k,passes=v=='A'?[['rgba(0,0,0,.34)',0],['rgba(255,255,255,.10)',.07*k]]:[['rgba(255,255,255,.09)',0],['rgba(0,0,0,.6)',.07*k]];g.lineCap='round';g.lineWidth=.07*k;
+for(const[col,o]of passes){g.strokeStyle=col;for(let q=-1;q*sp<H+sp;q++){g.beginPath();for(let x=0;x<=W;x+=3){const y=q*sp+o+A*Math.sin(2*Math.PI*x/P+(q%2?Math.PI:0));x?g.lineTo(x,y):g.moveTo(x,y)}g.stroke()}}}
+if(kind=='plain'){const t0=new THREE.CanvasTexture(c);t0.encoding=THREE.sRGBEncoding;t0.anisotropy=4;return t0}
+const nm=f=>`600 ${f}px ${SERIF}`,bq=f=>`500 ${f}px ${SERIF}`;
+const logo=(y,s)=>g.drawImage(logoInk(col.ink,240),cx-s/2,y,s,s);
+if(kind=='box'){const s=H;logo(H*.17,H*.3);spaced(g,'ETS. WIMAS',cx,H*.64,s*.1,.28,W*.5,col.ink,nm);spaced(g,'Boutique Vlisco Détail',cx,H*.77,s*.052,.2,W*.4,col.ink2,bq)}
+else if(kind=='front'||kind=='front2'){const s=Math.min(W,H*.6),fr=kind=='front';
+if(fr){g.strokeStyle=col.ink;g.lineWidth=2;g.strokeRect(W*.05,W*.05,W*.9,H-W*.1);g.globalAlpha=.5;g.strokeRect(W*.065,W*.065,W*.87,H-W*.13);g.globalAlpha=1}
+const ls=s*(fr?.34:.4);logo(H*.3,ls);const y=H*.3+ls+s*.14;
+spaced(g,'ETS. WIMAS',cx,y,s*.085,.26,W*.78,col.ink,nm);spaced(g,'Boutique Vlisco Détail',cx,y+s*.1,s*.05,.18,W*.78,col.ink2,bq);spaced(g,'Since 1846',cx,y+s*.19,s*.034,.3,W*.6,col.ink2,f=>`300 ${f}px ${SANS}`)}
+else{const s=Math.min(W,H*.6);spaced(g,'ETS. WIMAS',cx,H*.2,s*.075,.26,W*.78,col.ink,nm);spaced(g,'Boutique Vlisco Détail',cx,H*.2+s*.09,s*.045,.18,W*.78,col.ink2,bq);spaced(g,'Since 1846',cx,H*.2+s*.16,s*.032,.3,W*.6,col.ink2,f=>`300 ${f}px ${SANS}`);
+g.strokeStyle=col.ink2;g.globalAlpha=.5;g.beginPath();g.moveTo(cx-W*.08,H*.2+s*.23);g.lineTo(cx+W*.08,H*.2+s*.23);g.stroke();g.globalAlpha=1;
+const fs=Math.max(s*.034,10);let y=H*.2+s*.34;y=lines(g,'Avenue Cleber DADJO à côté de la Banque Populaire',cx,y,fs,W*.74,col.ink2,1.45)+fs*.5;y=lines(g,'Tél: +228 22 21 15 69 / 90 04 59 34',cx,y,fs,W*.74,col.ink2,1.45)+fs*.5;lines(g,'Lomé - TOGO',cx,y,fs,W*.74,col.ink,1.45)}
+const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;t.anisotropy=8;return t}
+const mat=(c,o)=>new THREE.MeshStandardMaterial(Object.assign({color:c,roughness:.6,metalness:0},o||{}));
+const tm=t=>mat(0xffffff,{map:t,roughness:.5});
+function bx(w,h,d,x,y,z,mats){const o=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mats);o.position.set(x,y,z);return o}
+function build(p){const c=V[p.v],g=new THREE.Group(),pm=(w,h)=>mat(0xffffff,{map:panel(w,h,p.v,'plain'),roughness:.6}),pl=mat(c.bg),dk=mat(new THREE.Color(c.bg).multiplyScalar(.7));
+if(p.k=='drawer'){const top=tm(panel(38,15,p.v,'box')),t=.25,L=38;
+g.add(bx(L,t,15,0,4-t/2,0,[pl,pl,top,pl,pl,pl]),bx(L,t,15,0,t/2,0,[pl,pl,pl,tm(panel(38,15,p.v,'box')),pl,pl]),bx(L,4,t,0,2,7.5-t/2,[pl,pl,pl,pl,pm(38,4),pl]),bx(L,4,t,0,2,-7.5+t/2,[pl,pl,pl,pl,pl,pm(38,4)]));
+const dl=36.6,dz=14.3,tr=new THREE.Group();tr.position.x=14;
+tr.add(bx(dl,t,dz,0,.25+t/2,0,dk),bx(dl,3.5,t,0,2,dz/2-t/2,[dk,dk,dk,dk,pm(dl,3.5),dk]),bx(dl,3.5,t,0,2,-dz/2+t/2,[dk,dk,dk,dk,dk,pm(dl,3.5)]),bx(t,3.5,dz,dl/2,2,0,[pm(dz,3.5),pl,pl,pl,pl,pl]),bx(t,3.5,dz,-dl/2,2,0,dk),bx(1.2,1.4,.2,dl/2+.6,3,0,mat(c.ink2)));
+g.add(tr);g.userData.tray=tr}
+else if(p.k=='pillow'){const W=16.5,hw=W/2,nz=26,nx=64,Hc=2.75,xe=z=>19-2.2*(1-(z/hw)**2),tx=panel(38,W,p.v,'box');
+const mk=sg=>{const pos=[],uv=[],idx=[];for(let i=0;i<=nx;i++){const s=-1+2*i/nx;for(let j=0;j<=nz;j++){const z=-hw+W*j/nz,x=s*xe(z),h=Hc*Math.pow(1-(z/hw)**2,.7)*Math.pow(1-Math.pow(Math.abs(s),3),.8);pos.push(x,sg*h,z);uv.push(x/38+.5,sg>0?.5-z/W:.5+z/W)}}
+for(let i=0;i<nx;i++)for(let j=0;j<nz;j++){const a=i*(nz+1)+j,b=a+nz+1;idx.push(a,b,a+1,b,b+1,a+1)}
+const gm=new THREE.BufferGeometry();gm.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));gm.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));gm.setIndex(idx);gm.computeVertexNormals();return new THREE.Mesh(gm,new THREE.MeshStandardMaterial({map:tx,roughness:.5,side:THREE.DoubleSide}))};
+g.add(mk(1),mk(-1))}
+else{const B=BAG[p.k],w=B.w,h=B.h,d=B.d,t=.14,f=tm(panel(w,h,p.v,B.frame?'front':'front2')),bk=tm(panel(w,h,p.v,'back')),cr=Math.min(d*.3,3.2),L=Math.hypot(cr,d/2);
+g.add(bx(w,h,t,0,h/2,d/2,[pl,pl,pl,pl,f,dk]),bx(w,h,t,0,h/2,-d/2,[pl,pl,pl,pl,dk,bk]),bx(w,t,d,0,t/2,0,dk));
+for(const sx of[-1,1])for(const sz of[-1,1]){const dx=-sx*cr,dz=-sz*d/2,ph=Math.atan2(-dz,dx),cx=sx*(w/2-cr/2),cz=sz*d/4,out=(Math.sin(ph)*cx+Math.cos(ph)*cz)>0?4:5,m=[pl,pl,pl,pl,dk,dk];m[out]=pm(L,h);const o=bx(L,h,t,cx,h/2,cz,m);o.rotation.y=ph;g.add(o)}
+const hw=B.hw,lp=h*B.lp,rm=mat(c.ink2,{roughness:.9});
+for(const z of[d/2,-d/2]){const pts=[[-hw,h-2],[-hw,h+lp*.55],[-hw*.45,h+lp*.95],[hw*.45,h+lp*.95],[hw,h+lp*.55],[hw,h-2]].map(a=>new THREE.Vector3(a[0],a[1],z*.96));g.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts),40,B.r,8),rm))}}
+return g}
+const cache={};let trayT=14,zoom=1,tgz=1,cur=null,target=0,ang=0,tgx=0,angx=0,t0=0,sc0=1,fit={};
+function layout(){const w=cv.clientWidth,h=cv.clientHeight;R.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix();if(cache.cur!=null)frame()}
+function frame(){const o=cache[cache.cur],b=new THREE.Box3().setFromObject(o),s=b.getSize(new THREE.Vector3()).length()/2;const vf=cam.fov*Math.PI/360,hf=Math.atan(Math.tan(vf)*cam.aspect),hh=Math.min(vf,hf),dist=s/Math.sin(hh)*1.12,el=.3;fit.dist=dist;fit.el=el;const sz=b.getSize(new THREE.Vector3());shadow.scale.set(Math.max(sz.x,sz.z)*1.5,Math.max(sz.x,sz.z)*1.1,1);shadow.position.y=-sz.y/2-sz.y*.12;fit.h=sz.y}
+async function show(n){if(n===-2){cv.style.opacity=0;return}cv.style.opacity=1;const i=n<0?4:n;if(i===cache.cur)return;
+await logoReady;try{await Promise.all([document.fonts.load('600 40px "Cormorant Garamond"'),document.fonts.load('500 40px "Cormorant Garamond"'),document.fonts.load('300 20px Jost')])}catch(e){}
+if(!cache[i]){const g=build(P[i]),c=new THREE.Box3().setFromObject(g).getCenter(new THREE.Vector3());const w=new THREE.Group();g.position.sub(c);w.add(g);cache[i]=w}
+holder.clear();holder.add(cache[i]);cache.cur=i;target=ang=.5;tgx=angx=0;tgz=zoom=1;trayT=14;auto=true;sc0=.9;frame()}
+function loop(t){requestAnimationFrame(loop);const i=cache.cur;if(i==null)return;const o=cache[i];if(!o)return;
+if(!drag){if(auto)target+=.0025;}ang+=(target-ang)*.08;sc0+=(1-sc0)*.1;angx+=(tgx-angx)*.08;zoom+=(tgz-zoom)*.12;cam.position.set(0,Math.sin(fit.el)*fit.dist/zoom,Math.cos(fit.el)*fit.dist/zoom);cam.lookAt(0,0,0);const tr=o.children[0]&&o.children[0].userData.tray;if(tr)tr.position.x+=(trayT-tr.position.x)*.1;holder.rotation.y=ang;holder.rotation.x=angx;holder.scale.setScalar(sc0);
+holder.position.y=Math.sin(t/900)*.5*(fit.h||5)*.03;R.render(S,cam)}
+let drag=false,lx=0,ly=0,auto=true,ex=false,moved=0,pd=0,lastTap=0;const pts=new Map(),clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const ui=document.createElement('div');ui.id='exui';document.body.appendChild(ui);
+function openEx(){if(ex||cache.cur==null||cv.style.opacity==='0')return;const p=P[cache.cur];ex=true;document.body.classList.add('ex');document.documentElement.style.overflow='hidden';
+ui.innerHTML=`<button id="exx" aria-label="Close">✕</button><div class="cap">${V[p.v].n} · ${p.d}</div><div class="hint">Drag to rotate · pinch to zoom · double-tap to reset${p.k=='drawer'?'<br>Tap “Open / Close” to slide the drawer':''}</div><div class="views">${views(p)}${p.k=='drawer'?'<button data-open="1">Open / Close</button>':''}</div>`;ui.style.display='block';setTimeout(layout,30)}
+function closeEx(){if(!ex)return;ex=false;document.body.classList.remove('ex');document.documentElement.style.overflow='';ui.style.display='none';tgz=1;tgx=0;setTimeout(layout,30)}
+cv.addEventListener('pointerdown',e=>{pts.set(e.pointerId,{x:e.clientX,y:e.clientY});cv.setPointerCapture(e.pointerId);if(pts.size==1){moved=0;lx=e.clientX;ly=e.clientY;drag=true;auto=false;cv.style.cursor='grabbing'}else if(pts.size==2){const[a,b]=[...pts.values()];pd=Math.hypot(a.x-b.x,a.y-b.y)}});
+cv.addEventListener('pointermove',e=>{if(!pts.has(e.pointerId))return;pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
+if(pts.size==2){const[a,b]=[...pts.values()],d=Math.hypot(a.x-b.x,a.y-b.y);if(pd){tgz=clamp(tgz*d/pd,.6,3.5)}pd=d;moved=99;return}
+if(!drag)return;const dx=e.clientX-lx,dy=e.clientY-ly;lx=e.clientX;ly=e.clientY;moved+=Math.abs(dx)+Math.abs(dy);target+=dx*.012;if(ex){tgx+=dy*.012;if(cache.cur>3)tgx=clamp(tgx,-.6,.6)}});
+const up=e=>{pts.delete(e.pointerId);if(pts.size<2)pd=0;if(pts.size==0){drag=false;cv.style.cursor='pointer';if(moved<8&&e.type=='pointerup'){if(!ex)openEx();else{const n=Date.now();if(n-lastTap<320){target=Math.round(target/(Math.PI*2))*Math.PI*2+.5;tgx=0;tgz=1}lastTap=n}}}};
+cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);
+cv.addEventListener('wheel',e=>{if(ex){e.preventDefault();tgz=clamp(tgz*(e.deltaY<0?1.1:.9),.6,3.5)}},{passive:false});
+addEventListener('keydown',e=>{if(e.key=='Escape')closeEx()});
+document.addEventListener('click',e=>{if(e.target.closest('#exx'))return closeEx();const o=e.target.closest('button[data-open]');if(o){trayT=trayT>7?0:14;return}
+const b=e.target.closest('button[data-a]');if(b){auto=false;const full=Math.round(target/(Math.PI*2))*Math.PI*2;target=full+parseFloat(b.dataset.a);tgx=parseFloat(b.dataset.x)}});
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){const n=secs.indexOf(e.target);nav.querySelectorAll('a').forEach((a,j)=>a.classList.toggle('on',j==n));show(+e.target.dataset.i)}}),{threshold:.55});secs.forEach(s=>io.observe(s));
+addEventListener('resize',layout);layout();requestAnimationFrame(loop);
+</script></body></html>
